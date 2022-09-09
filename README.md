@@ -1,2 +1,2 @@
 # restapi-handle-exception
-Chom and edit
+http://localhost:8080/swagger-ui.html
