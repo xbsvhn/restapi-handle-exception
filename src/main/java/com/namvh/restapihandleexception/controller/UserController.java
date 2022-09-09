@@ -4,7 +4,10 @@ import com.namvh.restapihandleexception.model.dto.UserDto;
 import com.namvh.restapihandleexception.model.request.CreateUserRequest;
 import com.namvh.restapihandleexception.model.request.UpdateUserRequest;
 import com.namvh.restapihandleexception.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,7 @@ import java.util.List;
 
 @RequestMapping("/users")
 @RestController
+@Api(value = "User APIs")
 public class UserController {
     //private static String UPLOAD_DIR = System.getProperty("user.home") + "/upload";
 
@@ -23,10 +27,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    //    @ApiOperation(value = "Get list user", response = UserDto.class, responseContainer = "List")
-//    @ApiResponses({
-//            @ApiResponse(code=500,message = "")
-//    })
+    @ApiOperation(value = "Get list user", response = UserDto.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 401, message = "Not Authen"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found")
+    })
     @GetMapping("")
     public ResponseEntity<?> getListUser() {
         List<UserDto> result = userService.getListUser();
@@ -34,44 +41,44 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-//    @ApiOperation(value = "Get user info by id", response = UserDto.class)
-//    @ApiResponses({
-//            @ApiResponse(code=404,message = "No user found"),
-//            @ApiResponse(code=500,message = "")
-//    })
+    @ApiOperation(value = "Get user info by id", response = UserDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "No user found"),
+            @ApiResponse(code = 500, message = "")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id) {
         UserDto result = userService.getUserById(id);
         return ResponseEntity.ok(result);
     }
 
-//    @ApiOperation(value = "Create user", response = UserDto.class)
-//    @ApiResponses({
-//            @ApiResponse(code=400,message = "Email already exists in the system"),
-//            @ApiResponse(code=500,message = "")
-//    })
+    @ApiOperation(value = "Create user", response = UserDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Email already exists in the system"),
+            @ApiResponse(code = 500, message = "")
+    })
     @PostMapping("")
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest req) {
         UserDto result = userService.createUser(req);
         return ResponseEntity.ok(result);
     }
 
-//    @ApiOperation(value = "Update user", response = UserDto.class)
-//    @ApiResponses({
-//            @ApiResponse(code=404,message = "No user found"),
-//            @ApiResponse(code=500,message = "")
-//    })
+    @ApiOperation(value = "Update user", response = UserDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "No user found"),
+            @ApiResponse(code = 500, message = "")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserRequest req, @PathVariable int id) {
         UserDto result = userService.updateUser(req, id);
         return ResponseEntity.ok(result);
     }
 
-//    @ApiOperation(value = "Delete user by id", response = String.class)
-//    @ApiResponses({
-//            @ApiResponse(code=404,message = "No user found"),
-//            @ApiResponse(code=500,message = "")
-//    })
+    @ApiOperation(value = "Delete user by id", response = String.class)
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "No user found"),
+            @ApiResponse(code = 500, message = "")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
